@@ -1,26 +1,24 @@
 <template>
-    <div>
-        <h1>HOME</h1>
-        <router-link to="/test"> Take me to Test page </router-link>
-        <button @click.prevent="getValue">Trigger Endpoint</button>
-        <p v-if="response">{{ response.data }}</p>
+    <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
+        <h1 class="mb-4 text-center">Canlı Chat Platformu</h1>
+
+        <div class="d-flex gap-3">
+            <button class="btn btn-primary btn-lg" @click="goToLogin">Giriş Yap</button>
+            <button class="btn btn-success btn-lg" @click="goToRegister">Kayıt Ol</button>
+        </div>
     </div>
 </template>
 
 <script setup>
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 
-import axios from "axios";
-import { ref } from "vue";
+const goToRegister = () => {
+    router.push("/register");
+};
 
-const response = ref();
-
-const getValue = async () => {
-    try {
-        response.value = await axios.get("/api/test-me");
-    } catch (error) {
-        // Do something with the error
-        console.log(error);
-    }
+const goToLogin = () => {
+    router.push("/login");
 };
 </script>
