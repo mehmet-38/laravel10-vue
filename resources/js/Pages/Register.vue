@@ -16,7 +16,6 @@
                     />
                 </div>
 
-
                 <div class="form-group mb-3">
                     <label for="email">Email:</label>
                     <input
@@ -28,7 +27,6 @@
                         required
                     />
                 </div>
-
 
                 <div class="form-group mb-3">
                     <label for="password">Şifre:</label>
@@ -42,7 +40,6 @@
                     />
                 </div>
 
-
                 <div class="form-group mb-3">
                     <label for="password_confirmation">Şifre Tekrar:</label>
                     <input
@@ -55,20 +52,18 @@
                     />
                 </div>
 
-
-                <button type="submit" class="btn btn-success w-100">Register</button>
+                <button type="submit" class="btn btn-success w-100">Kayıt Ol</button>
             </form>
 
-            <!-- Error Message -->
             <p v-if="errorMessage" class="text-danger mt-3 text-center">{{ errorMessage }}</p>
         </div>
     </div>
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { registerUser } from './../apiService.js';
 
 const name = ref('');
 const email = ref('');
@@ -77,24 +72,17 @@ const password_confirmation = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
-const register = async () => {
-    try {
-        const response = await axios.post("/api/register", {
-            name: name.value,
-            email: email.value,
-            password: password.value,
-            password_confirmation: password_confirmation.value
+const register = () => {
+    registerUser(name.value, email.value, password.value, password_confirmation.value)
+        .then(() => {
+            router.push('/login');
+        })
+        .catch(error => {
+            if (error.response && error.response.data.message) {
+                errorMessage.value = error.response.data.message;
+            } else {
+                errorMessage.value = "Kayıt yapılamadı. Lütfen bilgilerinizi kontrol edin.";
+            }
         });
-
-        router.push('/login');
-    } catch (error) {
-
-        if (error.response && error.response.data.message) {
-            errorMessage.value = error.response.data.message;
-        } else {
-            errorMessage.value = "Kayıt yapılamadı. Lütfen bilgilerinizi kontrol edin.";
-        }
-        console.log(error);
-    }
 };
 </script>

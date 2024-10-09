@@ -21,11 +21,11 @@
                         type="password"
                         id="password"
                         class="form-control"
-                        placeholder="şifreniz"
+                        placeholder="Şifreniz"
                         required
                     />
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
             </form>
             <p v-if="errorMessage" class="text-danger mt-3 text-center">{{ errorMessage }}</p>
         </div>
@@ -35,27 +35,24 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { loginUser } from './../apiService.js';
 
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
-const login = async () => {
-    try {
-        const response = await axios.post('/api/login', {
-            email: email.value,
-            password: password.value
+const login = () => {
+    loginUser(email.value, password.value)
+        .then(data => {
+            if (data.status === true) {
+                router.push('/manager/messages');
+            } else {
+                errorMessage.value = 'Giriş başarısız.';
+            }
+        })
+        .catch(() => {
+            errorMessage.value = 'Giriş yapılamadı. Lütfen tekrar deneyin.';
         });
-
-        if (response.data.status === true) {
-            router.push('/manager/messages');
-        } else {
-            errorMessage.value = 'Giriş başarısız.';
-        }
-    } catch (error) {
-        errorMessage.value = 'Giriş yapılamadı. Lütfen tekrar deneyin.';
-    }
 };
 </script>

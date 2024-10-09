@@ -1,8 +1,6 @@
 <template>
     <div class="container mt-4">
-
         <button @click="fetchMessages" class="btn btn-secondary mb-3">Yenile</button>
-
 
         <div class="message-list border p-3 mb-3">
             <div v-for="message in messages" :key="message.id"
@@ -16,13 +14,12 @@
             </div>
         </div>
 
-
         <div class="message-input-area d-flex">
             <input type="text" v-model="newMessage" placeholder="Mesajınızı yazın..." class="form-control me-2"/>
             <button @click="sendMessage"
                     class="btn btn-primary"
-                    :disabled="newMessage.length < 10"
-            >Gönder
+                    :disabled="newMessage.length < 10">
+                Gönder
             </button>
         </div>
     </div>
@@ -30,46 +27,35 @@
 
 <script setup>
 import {ref, onMounted} from 'vue';
-import axios from 'axios';
-
+import {getMessages, postMessage} from './../apiService.js';
 
 const messages = ref([]);
-
-
 const newMessage = ref('');
 
-
-const fetchMessages = async () => {
-    try {
-        const response = await axios.get('/api/manager/messages');
-        messages.value = response.data;
-    } catch (error) {
-        console.error('Mesajlar yüklenemedi:', error);
-    }
+const fetchMessages = () => {
+    getMessages()
+        .then(data => {
+            messages.value = data;
+        })
+        .catch(error => {
+            console.error("Mesajları yüklerken bir hata oluştu:", error);
+        });
 };
 
-
-const sendMessage = async () => {
+const sendMessage = () => {
     if (newMessage.value.trim() === '') {
         return;
     }
-    fetchMessages();
 
-    try {
-        const response = await axios.post('/api/manager/messages', {
-            message: newMessage.value,
+    postMessage(newMessage.value)
+        .then(data => {
+            messages.value.unshift(data);
+            newMessage.value = '';
+        })
+        .catch(error => {
+            console.error("Mesaj gönderirken bir hata oluştu:", error);
         });
-
-
-        messages.value.unshift(response.data);
-
-
-        newMessage.value = '';
-    } catch (error) {
-        console.error('Mesaj gönderilemedi:', error);
-    }
 };
-
 
 onMounted(() => {
     fetchMessages();
