@@ -1,9 +1,9 @@
 <template>
     <div class="container mt-4">
-        <!-- Mesajları yenileme butonu -->
+
         <button @click="fetchMessages" class="btn btn-secondary mb-3">Yenile</button>
 
-        <!-- Mesajların bulunduğu kaydırılabilir alan -->
+
         <div class="message-list border p-3 mb-3">
             <div v-for="message in messages" :key="message.id"
                  class="message-item d-flex justify-content-between border mb-2 p-2">
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <!-- Mesaj gönderme alanı -->
+
         <div class="message-input-area d-flex">
             <input type="text" v-model="newMessage" placeholder="Mesajınızı yazın..." class="form-control me-2"/>
             <button @click="sendMessage"
@@ -32,13 +32,13 @@
 import {ref, onMounted} from 'vue';
 import axios from 'axios';
 
-// Mesajlar state
+
 const messages = ref([]);
 
-// Yeni mesaj için input
+
 const newMessage = ref('');
 
-// Mesajları backend'den almak için fonksiyon
+
 const fetchMessages = async () => {
     try {
         const response = await axios.get('/api/manager/messages');
@@ -48,28 +48,29 @@ const fetchMessages = async () => {
     }
 };
 
-// Yeni mesaj göndermek için fonksiyon
+
 const sendMessage = async () => {
     if (newMessage.value.trim() === '') {
-        return; // Mesaj boşsa gönderme
+        return;
     }
+    fetchMessages();
 
     try {
         const response = await axios.post('/api/manager/messages', {
             message: newMessage.value,
         });
 
-        // Yeni gönderilen mesajı listeye ekliyoruz
+
         messages.value.unshift(response.data);
 
-        // Input alanını temizle
+
         newMessage.value = '';
     } catch (error) {
         console.error('Mesaj gönderilemedi:', error);
     }
 };
 
-// Sayfa yüklendiğinde mesajları getirme
+
 onMounted(() => {
     fetchMessages();
 });

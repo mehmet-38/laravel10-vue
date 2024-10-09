@@ -3,7 +3,7 @@
         <div class="card p-4" style="width: 100%; max-width: 400px;">
             <h1 class="text-center mb-4">Kayıt Ol</h1>
             <form @submit.prevent="register">
-                <!-- Kullanıcı Adı -->
+
                 <div class="form-group mb-3">
                     <label for="name">Kullanıcı Adı:</label>
                     <input
@@ -16,7 +16,7 @@
                     />
                 </div>
 
-                <!-- Email -->
+
                 <div class="form-group mb-3">
                     <label for="email">Email:</label>
                     <input
@@ -29,7 +29,7 @@
                     />
                 </div>
 
-                <!-- Şifre -->
+
                 <div class="form-group mb-3">
                     <label for="password">Şifre:</label>
                     <input
@@ -42,7 +42,7 @@
                     />
                 </div>
 
-                <!-- Şifre Tekrar -->
+
                 <div class="form-group mb-3">
                     <label for="password_confirmation">Şifre Tekrar:</label>
                     <input
@@ -55,7 +55,7 @@
                     />
                 </div>
 
-                <!-- Register Button -->
+
                 <button type="submit" class="btn btn-success w-100">Register</button>
             </form>
 
