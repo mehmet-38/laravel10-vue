@@ -59,6 +59,11 @@ const sendMessage = () => {
 
 onMounted(() => {
     fetchMessages();
+
+    window.Echo.channel('messages')
+        .listen('MessageSent', (event) => {
+            messages.value.unshift(event.message);
+        });
 });
 </script>
 

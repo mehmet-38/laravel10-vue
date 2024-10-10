@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Models\Message;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,6 +33,8 @@ class MessageController extends Controller
         ])->save();
 
         $model = Message::with('user:id,name')->findOrFail($model->id);
+
+        broadcast(new MessageSent($model))->toOthers();
 
         return response()->json($model);
     }
